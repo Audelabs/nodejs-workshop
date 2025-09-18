@@ -1,0 +1,19 @@
+---
+let message = "";
+
+try {
+  const response = await fetch('http://localhost:3000');
+  message  = await response.text();
+} catch (error) {
+  const e = error as Error;
+  message = e.message;
+}
+---
+
+<section class="max-w-4xl mx-auto px-4 py-8">
+<h1 class="text-3xl font-bold">Bienvenido al Taller de Node.js</h1>
+
+<p class="mt-12 mb-6 text-xl">Status del backend:</p>
+
+  <pre class="bg-black text-amber-500 px-4 py-2">{message}</pre>
+</section>

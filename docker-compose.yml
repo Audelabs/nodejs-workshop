@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: pg-workshop
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: workshopdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Opcional: para que vean la DB visualmente
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
