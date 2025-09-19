@@ -199,3 +199,40 @@ Aquí tienes un resumen de los comandos más importantes que usarás durante el 
 - `npm run dev`: Iniciar servidor de desarrollo.
 - `npm run build`: Compilar el sitio para producción.
 - `npm run preview`: Previsualizar el sitio de producción localmente.
+
+---
+
+### Cómo resetear la base de datos
+
+Si necesitas empezar desde cero con la base de datos, por ejemplo, para agregar nuevas entidades al `schema.prisma` antes de la migración inicial, puedes seguir estos pasos para resetearla por completo:
+
+1.  **Detener y eliminar los contenedores y volúmenes de Docker:**
+    Esto eliminará la base de datos actual y todos sus datos.
+
+    ```bash
+    docker-compose down -v
+    ```
+
+2.  **Eliminar el historial de migraciones de Prisma:**
+    Esto borra las migraciones anteriores para que puedas crear una nueva desde cero.
+
+    ```bash
+    rm -rf back/prisma/migrations
+    ```
+
+3.  **Iniciar los servicios de Docker nuevamente:**
+    Esto creará un nuevo contenedor de base de datos vacío.
+
+    ```bash
+    docker-compose up -d
+    ```
+
+4.  **Crear y aplicar la nueva migración inicial:**
+    Desde el directorio `back`, ejecuta el comando de Prisma para crear una nueva migración basada en tu `schema.prisma` y aplicarla a la nueva base de datos.
+
+    ```bash
+    cd back
+    npx prisma migrate dev --name init
+    ```
+
+¡Listo! Con estos pasos, tu base de datos estará reseteada y actualizada con el esquema más reciente.
