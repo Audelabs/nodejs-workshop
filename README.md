@@ -6,10 +6,10 @@
 
 Para que entiendas cómo se conectan las piezas, aquí tienes un resumen de la arquitectura:
 
--   **Backend (NestJS):** Es el cerebro de la aplicación. Una API REST construida con NestJS que se encarga de toda la lógica de negocio, la validación de datos y la comunicación con la base de datos.
--   **Frontend (Astro):** Es la cara visible de la aplicación. Un sitio web rápido y moderno construido con Astro que consume los datos del backend para mostrarlos al usuario.
--   **Base de Datos (PostgreSQL + Prisma):** Utilizamos una base de datos PostgreSQL para almacenar toda la información. **Prisma** actúa como nuestro ORM (Object-Relational Mapper), permitiéndonos interactuar con la base de datos de una forma segura e intuitiva desde el backend.
--   **Docker:** Usamos `docker-compose` para levantar servicios esenciales como la base de datos PostgreSQL y Adminer (un gestor visual de bases de datos). Esto te permite tener un entorno de desarrollo consistente sin necesidad de instalar PostgreSQL en tu máquina.
+- **Backend (NestJS):** Es el cerebro de la aplicación. Una API REST construida con NestJS que se encarga de toda la lógica de negocio, la validación de datos y la comunicación con la base de datos.
+- **Frontend (Astro):** Es la cara visible de la aplicación. Un sitio web rápido y moderno construido con Astro que consume los datos del backend para mostrarlos al usuario.
+- **Base de Datos (PostgreSQL + Prisma):** Utilizamos una base de datos PostgreSQL para almacenar toda la información. **Prisma** actúa como nuestro ORM (Object-Relational Mapper), permitiéndonos interactuar con la base de datos de una forma segura e intuitiva desde el backend.
+- **Docker:** Usamos `docker-compose` para levantar servicios esenciales como la base de datos PostgreSQL y Adminer (un gestor visual de bases de datos). Esto te permite tener un entorno de desarrollo consistente sin necesidad de instalar PostgreSQL en tu máquina.
 
 ---
 
@@ -68,15 +68,15 @@ npm run dev
 
 Ya deberías tener todo funcionando. Aquí tienes los puertos para acceder a cada servicio:
 
--   **Backend:** `http://localhost:3000`
--   **Frontend:** `http://localhost:4321`
--   **PostgreSQL (conexión directa):** `localhost:5432`
--   **Adminer (gestor visual de BD):** `http://localhost:8080`
-    -   **Sistema:** `PostgreSQL`
-    -   **Servidor:** `postgres`
-    -   **Usuario:** `postgres`
-    -   **Contraseña:** `postgres`
-    -   **Base de datos:** `postgres`
+- **Backend:** `http://localhost:3000`
+- **Frontend:** `http://localhost:4321`
+- **PostgreSQL (conexión directa):** `localhost:5432`
+- **Adminer (gestor visual de BD):** `http://localhost:8080`
+  - **Sistema:** `PostgreSQL`
+  - **Servidor:** `postgres`
+  - **Usuario:** `postgres`
+  - **Contraseña:** `postgres`
+  - **Base de datos:** `workshopdb`
 
 ---
 
@@ -127,9 +127,9 @@ Abre el archivo `/back/src/cursos/cursos.service.ts`. Inyecta `PrismaService` y 
 
 ```typescript
 // /back/src/cursos/cursos.service.ts
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service'; // ¡Asegúrate de que la ruta sea correcta!
-import { Prisma } from '@prisma/client';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../prisma.service"; // ¡Asegúrate de que la ruta sea correcta!
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class CursosService {
@@ -155,8 +155,8 @@ export class CursosService {
 
 Finalmente, crea una página en el frontend para mostrar los datos.
 
-1.  Crea un nuevo archivo en `/front/src/pages/cursos.astro`.
-2.  Dentro de este archivo, haz un `fetch` al endpoint del backend (ej: `http://localhost:3000/cursos`) para obtener los datos y renderizarlos.
+1. Crea un nuevo archivo en `/front/src/pages/cursos.astro`.
+2. Dentro de este archivo, haz un `fetch` al endpoint del backend (ej: `http://localhost:3000/cursos`) para obtener los datos y renderizarlos.
 
 ```astro
 ---
@@ -189,13 +189,13 @@ Aquí tienes un resumen de los comandos más importantes que usarás durante el 
 
 ### Backend (`/back`)
 
--   `npm run start:dev`: Iniciar servidor en modo desarrollo.
--   `npx prisma migrate dev --name <nombre-migracion>`: Crear una nueva migración de base de datos después de cambiar `schema.prisma`.
--   `npx prisma studio`: Abrir una interfaz visual en el navegador para ver y editar los datos de tu base de datos. ¡Muy recomendado!
--   `nest g resource <nombre>`: Generar un nuevo módulo API completo (módulo, controlador, servicio, DTOs, entidad).
+- `npm run start:dev`: Iniciar servidor en modo desarrollo.
+- `npx prisma migrate dev --name <nombre-migracion>`: Crear una nueva migración de base de datos después de cambiar `schema.prisma`.
+- `npx prisma studio`: Abrir una interfaz visual en el navegador para ver y editar los datos de tu base de datos. ¡Muy recomendado!
+- `nest g resource <nombre>`: Generar un nuevo módulo API completo (módulo, controlador, servicio, DTOs, entidad).
 
 ### Frontend (`/front`)
 
--   `npm run dev`: Iniciar servidor de desarrollo.
--   `npm run build`: Compilar el sitio para producción.
--   `npm run preview`: Previsualizar el sitio de producción localmente.
+- `npm run dev`: Iniciar servidor de desarrollo.
+- `npm run build`: Compilar el sitio para producción.
+- `npm run preview`: Previsualizar el sitio de producción localmente.
