@@ -1,0 +1,218 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+type Calificacion = {
+  materia: string;
+  calificacion: number;
+};
+
+type Estudiante = {
+  id: number;
+  nombre: string;
+  email: string;
+  calificacion: Calificacion[];
+};
+
+let error = '';
+let estudiantes: Estudiante[] = [];
+
+try {
+  const response = await fetch('http://localhost:3000/estudiantes');
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  estudiantes = await response.json();
+} catch (err) {
+  error = err instanceof Error ? err.message : 'Error desconocido';
+}
+---
+
+<Layout title="Estudiantes">
+<div class="max-w-4xl mx-auto p-6">
+  <h1 class="text-3xl font-extrabold text-gray-800 mb-8 flex items-center">
+    Estudiantes
+  </h1>
+
+  {error && (
+    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-8">
+      <div class="flex">
+        <svg class="h-6 w-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <p class="font-medium">Error al cargar los datos</p>
+          <p>{error}</p>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <!-- Formulario mejorado -->
+  <form
+    id="calificaciones-form"
+    class="bg-gradient-to-br from-white to-gray-50 shadow-xl rounded-xl p-8 mb-10 space-y-6 border border-gray-100"
+  >
+    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+      Agregar Calificaci&oacute;n
+    </h2>
+
+    <div>
+      <label for="nombre" class="block text-sm font-semibold text-gray-700 mb-2">Nombre Completo</label>
+      <input
+        id="nombre"
+        name="nombre"
+        type="text"
+        placeholder="Ej. Juan Carlos"
+        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 sm:text-sm"
+        required
+      />
+    </div>
+
+    <div>
+      <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Correo Electr&oacute;nico</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        placeholder="ejemplo@correo.com"
+        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 sm:text-sm"
+        required
+      />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="materia" class="block text-sm font-semibold text-gray-700 mb-2">Materia</label>
+        <input
+          id="materia"
+          name="materia"
+          type="text"
+          placeholder="Ej. calculo-101, historia-102"
+          class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 sm:text-sm"
+        />
+      </div>
+
+      <div>
+        <label for="calificacion" class="block text-sm font-semibold text-gray-700 mb-2">Calificaci&oacute;n (0-100)</label>
+        <input
+          id="calificacion"
+          name="calificacion"
+          type="number"
+          min="0"
+          max="100"
+          placeholder="Ej. 85"
+          class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 sm:text-sm"
+        />
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium py-3 px-6 rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+    >
+      Guardar Estudiante
+    </button>
+  </form>
+
+  <!-- Lista de estudiantes -->
+  {estudiantes.length < 1 && !error && (
+    <div class="text-center py-12 bg-gray-50 rounded-xl">
+      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="rnd" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+      </svg>
+      <h3 class="mt-4 text-lg font-medium text-gray-700">No hay estudiantes registrados aún</h3>
+      <p class="mt-2 text-gray-500">Agrega el primero usando el formulario de arriba.</p>
+    </div>
+  )}
+
+  {estudiantes.length > 0 && (
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
+      {estudiantes.map((est) => (
+        <div
+          class="bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6"
+        >
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-xl font-bold text-gray-800">{est.nombre}</h3>
+              <p class="text-sm text-gray-600 mt-1">{est.email}</p>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+              ID: {est.id}
+            </span>
+          </div>
+
+          {est.calificacion && est.calificacion.length > 0 && (
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <h4 class="text-sm font-semibold text-gray-700 mb-2">Calificaciones:</h4>
+              <ul class="space-y-1">
+                {est.calificacion.map((c, idx) => {
+                  const claseCalificacion = c.calificacion >= 70 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                  return (
+                    <li class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded">
+                      <span class="text-gray-800 font-medium">{c.materia}</span>
+                      <span class={`px-2 py-1 rounded text-sm font-bold ${claseCalificacion}`}>
+                        {c.calificacion}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+
+          {(!est.calificacion || est.calificacion.length === 0) && (
+            <p class="mt-4 text-sm text-gray-500 italic">Sin calificaciones registradas</p>
+          )}
+        </div>
+      ))}
+    </div>
+  )}
+  </div>
+</Layout>
+
+<script is:client>
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const nombre = form.nombre.value.trim();
+    const email = form.email.value.trim();
+    const materia = form.materia.value.trim();
+    const calificacion = parseInt(form.calificacion.value, 10);
+
+    if (!nombre || !email) {
+      alert("Por favor, completa los campos obligatorios: Nombre y Email.");
+      return;
+    }
+
+    const estudiante = {
+      nombre,
+      email,
+      materia,
+      calificacion,
+    };
+
+    try {
+      const res = await fetch("http://localhost:3000/estudiantes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(estudiante),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(`Error al guardar estudiante: ${errorData.message || res.statusText}`);
+      }
+
+      // Refresca la páacute;gina para ver la lista actualizada
+      window.location.reload();
+    } catch (err) {
+      alert("Error: " + (err instanceof Error ? err.message : 'Error desconocido'));
+    }
+  }
+
+  const form = document.getElementById("calificaciones-form");
+  if (form) {
+    form.addEventListener('submit', handleSubmit);
+  }
+</script>
